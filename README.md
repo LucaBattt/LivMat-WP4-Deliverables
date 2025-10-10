@@ -8,7 +8,6 @@ A repository with the solicited deliverables and additional information/tasks fr
 
 ## Tasks
 - [x] Task 4.1: Database interfaces and digital bacterial representation
-- [ ] Task 4.2: ML-based feature identification for pairwise bacterial
-- [ ] interactions
+- [ ] Task 4.2: ML-based feature identification for pairwise bacterial interactions
 - [ ] Task 4.3: ML-based prediction and optimization of cat-LMs within
 porous materials for chemical production
