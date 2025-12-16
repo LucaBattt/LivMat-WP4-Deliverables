@@ -3,7 +3,7 @@ A repository with the solicited deliverables and additional information/tasks fr
 
 ## Deliverables
 - [x] D4.1: Tools for interfacing with existing databases
-- [ ] D4.2: Random Forest model representing multispecies biofilms
+- [x] D4.2: Random Forest model representing multispecies biofilms
 - [ ] D4.3: Report and user manual of optimal AI models for cat-LMs
 
 ## Tasks
