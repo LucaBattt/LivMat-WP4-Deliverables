@@ -1,5 +1,5 @@
-# LivMat-WP4-Deliverables
-A repository with the solicited deliverables and additional information/tasks from WP4 for the LivMat team
+# LivMat-WP4
+A repository with the solicited deliverables and additional information, tasks, code, data and data analysis from WP4 for the LivMat team.
 
 ## Deliverables
 - [x] D4.1: Tools for interfacing with existing databases
