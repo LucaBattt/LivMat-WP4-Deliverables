@@ -1,0 +1,8 @@
+global CBTDIR;
+model_ps = readCbModel([CBTDIR filesep 'MyCodes' filesep 'P_taiwanensis.xlsx']);
+model_sy = readCbModel([CBTDIR filesep 'MyCodes' filesep 'Synechocystis.xslx']);
+
+rxnIDs_ps = findRxnIDs(model_ps, model_ps.rxns(1:15));
+fprintf('--------------------------------------------------\n')
+fprintf('Reactions:\n')
+printLabeledData(model.rxns(1:15),rxnIDs)

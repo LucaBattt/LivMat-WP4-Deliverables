@@ -1,0 +1,78 @@
+% Load the Pseudomonas model
+model_sy = readCbModel('Synechocystis.xlsx');
+
+% Lets list the exchange reactions (exchanges that happen between the
+% internal metabolic network and the environment
+fprintf("------------------------------------------------------------------\n")
+fprintf("Exchange reactions:")
+ex = findExcRxns(model_sy);
+model_sy.rxns(ex) % A total of 58 exchange reactions
+
+% Make new instance of the model to leave the original untouched
+model_syA = model_sy;
+
+% Change the objective to biomass
+model_syA = changeObjective(model_syA, 'Ec_biomass_SynMixo');
+
+% Set oxygen uptake
+model_syA = changeRxnBounds(model_syA, 'EX_o2(e)', -10, 'l');
+
+% Set glucos uptake
+model_syA = changeRxnBounds(model_syA, 'EX_glc(e)', -10, 'l');
+
+% I will make a loop over glucose uptake bounds and save the biomass value
+
+% Glucose uptake values
+glucoseRange = -linspace(0,20,41); % 41 points from 0 to -20
+
+% For saving the results
+biomassFlux = zeros(length(glucoseRange),1);
+adipateFlux = zeros(length(glucoseRange),1);
+
+% Run the loop
+for i = 1:length(glucoseRange)
+    glc_uptake = glucoseRange(i);
+
+    % Set glucose lower bound
+    modelTmp = changeRxnBounds(model_syA, 'EX_glc(e)', glc_uptake, 'l');
+
+    % Solve FBA
+    sol = optimizeCbModel(modelTmp);
+
+    % Save the optimized adipate and biomass flux values
+    biomassFlux(i) = sol.f; % Biomass flux
+end
+
+% Plot biomass vs glucoseRange
+figure;
+plot(glucoseRange, biomassFlux, 'b-', 'LineWidth', 2);
+xlabel('Glucose Uptake (mmol/gDW/h)');
+ylabel('Flux (mmol/gDW/h)');
+legend('Biomass Flux');
+title('Biomass Flux vs Glucose Uptake');
+grid on;
+
+
+% --------------- Performing FBA to select top n fluxes -------------
+
+% Choose a single value for glucose uptake
+glc_uptake = -10;
+
+% Run FBA
+model_sy10 = changeRxnBounds(model_psA, 'EX_glc(e)', glc_uptake, 'l');
+model_sy10   = optimizeCbModel(model_sy10);
+fluxes     = model_sy10.x;
+
+
+% Extract top n fluxes by absolute value
+n = 100;
+[~, idx] = sort(abs(fluxes), 'descend'); % Sort fluxes by absolute value
+top20Fluxes = fluxes(idx(1:n)); % Select top n fluxes
+topRxns = model_sy10.rxns(idx(1:n)); % Get corresponding reaction IDs
+
+% Plot histogram
+figure;
+bar(abs(top20Fluxes));
+set(gca,'XTickLabel',topRxns,'XTickLabelRotation',90);
+ylabel('flux value');
+title('Top 100 fluxes (abs)');
